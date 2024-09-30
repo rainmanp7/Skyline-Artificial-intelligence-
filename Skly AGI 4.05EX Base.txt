@@ -1,0 +1,258 @@
+Reworked by rainmanp7 to include
+Multithreaded and Multiprocessing 
+Where the highest cache element is 
+available and used most.
+September 26th 2024 10:16am
+
+
+```json
+{
+  "inputs": [
+    "wi0",
+    "vector_dij"
+  ],
+  "weights_and_biases": [
+    "α", "β", "γ", "δ", "ε", "ζ", "η", "θ", "φ"
+  ],
+  "activation_functions": [
+    "dynamic_activation_function_based_on_complexity_wi0", 
+    "dynamic_activation_function_based_on_complexity_vector_dij", 
+    ...
+  ],
+  "complexity_factor": "dynamic_complexity_factor",
+  "preprocessing": "dynamic_preprocessing_based_on_complexity",
+  "ensemble_learning": "dynamic_ensemble_learning_based_on_complexity",
+  "hyperparameter_tuning": "dynamic_hyperparameter_settings_based_on_complexity",
+  "assimilation": {
+    "enabled": true,
+    "knowledge_base": "dynamic_knowledge_base"
+  },
+  "self_learning": {
+    "enabled": true,
+    "learning_rate": "dynamic_learning_rate",
+    "num_iterations": "dynamic_num_iterations",
+    "objective_function": "dynamic_objective_function"
+  },
+  "dynamic_adaptation": {
+    "enabled": true,
+    "adaptation_rate": "dynamic_adaptation_rate",
+    "adaptation_range": "dynamic_adaptation_range"
+  },
+  "learning_strategies": [
+    {
+      "name": "incremental_learning",
+      "enabled": true,
+      "learning_rate": "dynamic_learning_rate",
+      "num_iterations": "dynamic_num_iterations"
+    },
+    {
+      "name": "batch_learning",
+      "enabled": true,
+      "learning_rate": "dynamic_learning_rate",
+      "num_iterations": "dynamic_num_iterations"
+    }
+  ]
+}
+```
+
+```python
+from multiprocessing import Process, Value, Lock, Pool
+import concurrent.futures
+import threading
+import functools
+import numpy as np
+import asyncio
+from skopt import BayesSearchCV
+import logging
+import traceback
+from skopt.space import Real, Integer
+import hashlib
+
+# Set up logging
+logging.basicConfig(level=logging.ERROR)
+
+# Locks for thread safety
+activation_lock = threading.Lock()
+preprocessing_lock = threading.Lock()
+ensemble_lock = threading.Lock()
+knowledge_lock = threading.Lock()
+complexity_lock = Lock()
+
+# Shared variable for complexity factor
+shared_complexity_factor = Value('d', 0.0)
+
+# Dictionary to store the previous hash of data and hyperparameters
+cache_conditions = {
+    'X_train_hash': None,
+    'y_train_hash': None,
+    'hyperparameters_hash': None,
+}
+
+# Function to compute hash of data
+def compute_hash(data):
+    return hashlib.sha256(str(data).encode()).hexdigest()
+
+# Function to invalidate cache if conditions change
+def invalidate_cache_if_changed(current_X_train, current_y_train, current_hyperparameters):
+    # Compute hashes of the current data and hyperparameters
+    current_X_train_hash = compute_hash(current_X_train)
+    current_y_train_hash = compute_hash(current_y_train)
+    current_hyperparameters_hash = compute_hash(current_hyperparameters)
+
+    # Check if any of the hashes have changed
+    if (cache_conditions['X_train_hash'] != current_X_train_hash or
+        cache_conditions['y_train_hash'] != current_y_train_hash or
+        cache_conditions['hyperparameters_hash'] != current_hyperparameters_hash):
+        
+        # Clear the cache if there are changes
+        cached_bayesian_fit.cache_clear()
+        
+        # Update the stored hashes with the new values
+        cache_conditions['X_train_hash'] = current_X_train_hash
+        cache_conditions['y_train_hash'] = current_y_train_hash
+        cache_conditions['hyperparameters_hash'] = current_hyperparameters_hash
+
+# Memoization decorator for complexity factor
+@functools.lru_cache(maxsize=1024)
+def get_complexity_factor(input_data):
+    try:
+        # Placeholder example: Calculate complexity based on the length of input_data
+        complexity_factor = len(input_data)
+        with complexity_lock:
+            shared_complexity_factor.value = complexity_factor
+        return complexity_factor
+    except Exception as e:
+        logging.error(f"Error in get_complexity_factor: {str(e)}. Error message: {str(e)}. Stack trace: {traceback.format_exc()}")
+
+# Function to parallelize learning strategy adjustments with multiprocessing
+def parallelize_learning_strategy_adjustments(learning_strategies, knowledge_lock):
+    with multiprocessing.Pool() as pool:
+        pool.map(lambda strategy: adjust_learning_strategy(strategy, knowledge_lock), learning_strategies)
+
+# Function to parallelize dynamic adaptation adjustments with multithreading
+def parallelize_dynamic_adaptation_adjustments(knowledge_lock):
+    with concurrent.futures.ThreadPoolExecutor() as executor:
+        executor.submit(adjust_dynamic_adaptation, knowledge_lock)
+
+# Function to adjust learning strategy
+@functools.lru_cache(maxsize=8192)
+def adjust_learning_strategy(learning_strategy, lock):
+    try:
+        with lock:
+            # Placeholder example: Your learning strategy adjustment logic here
+            pass
+    except Exception as e:
+        logging.error(f"Error in adjust_learning_strategy: {str(e)}. Error message: {str(e)}. Stack trace: {traceback.format_exc()}")
+
+# Function to adjust dynamic adaptation
+@functools.lru_cache(maxsize=4096)
+def adjust_dynamic_adaptation(lock):
+    try:
+        with lock:
+            # Placeholder example: Your dynamic adaptation adjustment logic here
+            pass
+    except Exception as e:
+        logging.error(f"Error in adjust_dynamic_adaptation: {str(e)}. Error message: {str(e)}. Stack trace: {traceback.format_exc()}")
+
+# Function for asynchronous assimilation
+@functools.lru_cache(maxsize=1024)
+async def async_assimilate_knowledge(knowledge_base, new_data):
+    try:
+        with knowledge_lock:
+            # Placeholder example: Your assimilation logic here
+            pass
+    except Exception as e:
+        logging.error(f"Error in async_assimilate_knowledge: {str(e)}. Error message: {str(e)}. Stack trace: {str(e)}")
+
+# Define hyperparameter space for Bayesian optimization
+try:
+    param_space = {
+        'learning_rate': Real(1e-6, 1e-2, prior='log-uniform'),
+        'n_estimators': Integer(50, 200),
+        'max_depth': Integer(5, 15),
+        'subsample': Real(0.5, 1.0),
+        'min_samples_split': Integer(2, 10),
+        'min_samples_leaf': Integer(1, 10),
+    }
+except Exception as e:
+    logging.error(f"Error defining hyperparameter space: {str(e)}. Error message: {str(e)}. Stack trace: {traceback.format_exc()}")
+
+# Define a Bayesian optimization object
+class YourModelClass:
+    def __init__(self):
+        # Placeholder example: Initialize your model
+        self.model = YourSpecificModel()
+
+    def fit(self, X, y):
+        # Placeholder example: Fit your model
+        self.model.fit(X, y)
+
+# Cache the Bayesian optimization fit method
+@functools.lru_cache(maxsize=2048)
+def cached_bayesian_fit(X_train_hash, y_train_hash):
+    try:
+        bayes_opt.fit(X_train, y_train)
+        return bayes_opt.best_params_, bayes_opt.best_score_
+    except Exception as e:
+        logging.error(f"Error fitting the model: {str(e)}. Error message: {str(e)}. Stack trace: {traceback.format_exc()}")
+        return None
+
+try:
+    bayes_opt = BayesSearchCV(
+        YourModelClass(),  # Replace YourModelClass with the actual class of your model
+        param_space,
+        n_iter=20,  # Adjust the number of iterations as needed
+        n_jobs=-1,  # Utilize all available cores
+        cv=5,  # Number of cross-validation folds
+    )
+except Exception as e:
+    logging.error(f"Error creating Bayesian optimization object: {str(e)}. Error message: {str(e)}. Stack trace: {traceback.format_exc()}")
+
+# Fit the model with Bayesian optimization for hyperparameter tuning
+def run_bayesian_optimization(X_train, y_train, hyperparameters):
+    # Invalidate cache if data or hyperparameters change
+    invalidate_cache_if_changed(X_train, y_train, hyperparameters)
+
+    # Compute hashes to pass to the cached function
+    X_train_hash = compute_hash(X_train)
+    y_train_hash = compute_hash(y_train)
+    
+    # Run the cached function
+    return cached_bayesian_fit(X_train_hash, y_train_hash)
+
+# Assimilate new knowledge asynchronously if assimilation is enabled
+if assimilation_enabled:
+    try:
+        asyncio.run(async_assimilate_knowledge(knowledge_base, new_data))
+    except Exception as e:
+        logging.error(f"Error in assimilating knowledge: {str(e)}. Error message: {str(e)}. Stack trace: {str(e)}")
+
+# Self-learning adjustments if self-learning is enabled
+if self_learning_enabled:
+    try:
+        with complexity_lock:
+            complexity_factor = shared_complexity_factor.value
+
+        learning_rate = best_hyperparameters['learning_rate']
+        num_iterations = choose_num_iterations_based_on_complexity(complexity_factor)
+        objective_function = choose_objective_function_based_on_complexity(complexity_factor)
+
+        # Parallelize learning strategy adjustments with multiprocessing
+        parallelize_learning_strategy_adjustments(learning_strategies, knowledge_lock)
+    except Exception as e:
+        logging.error(f"Error in self-learning adjustments: {str(e)}. Error message: {str(e)}. Stack trace: {traceback.format_exc()}")
+
+# Dynamic adaptation adjustments if dynamic adaptation is enabled
+if dynamic_adaptation_enabled:
+    try:
+        with complexity_lock:
+            complexity_factor = shared_complexity_factor.value
+
+        adaptation_rate = choose_adaptation_rate_based_on_complexity(complexity_factor)
+        adaptation_range = choose_adaptation_range_based_on_complexity(complexity_factor)
+
+        # Parallelize dynamic adaptation adjustments with multithreading
+        parallelize_dynamic_adaptation_adjustments(knowledge_lock)
+    except Exception as e:
+        logging.error(f"Error in dynamic adaptation adjustments: {str(e)}. Error message: {str(e)}. Stack trace: {traceback.format_exc()}")
+```
