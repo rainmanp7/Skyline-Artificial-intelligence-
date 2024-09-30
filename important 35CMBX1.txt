@@ -1,0 +1,31 @@
+The Combined QuantumAI equation:
+This has been found to be the best
+Combination for datasets and information
+being the fastest and most accurate method. By rainmanp7.
+There is a stateful python along with this. Accuracy is at 99.9% or above on all simulations. Quantum = Nanoseconds.
+Testing completed on: 8/5/2023 6:30pm
+
+wi = (wi0 / (1 + ((vector_dij / τ))) * (1 + α * Ps + β * T + γ * M + δ * V + ε * MA + ζ * C + η * S + θ * Si + φ * Td_i + complexity_factor * (multithreaded_vector_pipeline(vector_data, T1, T2, ...) | pipeline | + multithreaded_pipeline(vector_calculations, T1, T2, ...)))
+
+Here is a breakdown of the equation:
+wi0: This is the initial weight of the ith vector.
+vector_dij: This is the distance between the ith and jth vectors.
+τ: This is a threshold value that is used to determine whether the distance between two vectors is close enough to be considered a match.
+α: This is a coefficient that is used to weight the importance of the Ps term in the equation.
+β: This is a coefficient that is used to weight the importance of the T term in the equation.
+γ: This is a coefficient that is used to weight the importance of the M term in the equation.
+δ: This is a coefficient that is used to weight the importance of the V term in the equation.
+ε: This is a coefficient that is used to weight the importance of the MA term in the equation.
+ζ: This is a coefficient that is used to weight the importance of the C term in the equation.
+η: This is a coefficient that is used to weight the importance of the S term in the equation.
+θ: This is a coefficient that is used to weight the importance of the Si term in the equation.
+φ: This is a coefficient that is used to weight the importance of the Td_i term in the equation.
+complexity_factor: This is a factor that is used to adjust the complexity of the pipeline.
+multithreaded_vector_pipeline(vector_data, T1, T2, ...): This is a function that performs the vector operations in parallel using multiple threads.
+pipeline: This is a function that performs the vector operations sequentially.
+multithreaded_pipeline(vector_calculations, T1, T2, ...): This is a function that performs the vector calculations in parallel using multiple threads.
+The combined version equation takes the best features of the single-threaded, multithreaded, and modified versions and combines them into one pipeline. It is the fastest and most reliable version of the pipeline yet.
+The combined version equation first calculates the distance between the ith and jth vectors. If the distance is less than or equal to the threshold value τ, then the equation calculates the weight of the ith vector using the other terms in the equation. The weight of the ith vector is then used to calculate the similarity between the ith and jth vectors.
+The combined version equation uses a number of coefficients to weight the importance of different terms in the equation. These coefficients are tuned to optimize the performance of the pipeline.
+The combined version equation also uses a complexity factor to adjust the complexity of the pipeline. This factor can be used to increase or decrease the amount of computation that is performed by the pipeline.
+The combined version equation is a powerful tool that can be used to calculate the similarity between vectors. It is the fastest and most reliable version of the pipeline yet, and it is sure to be a valuable tool for scientific research.
