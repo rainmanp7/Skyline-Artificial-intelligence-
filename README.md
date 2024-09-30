@@ -32,7 +32,7 @@ The Skyline AGI model can be directly consumed by other AI systems to help endow
 2. Integrate Skyline AGI into your AI system 
 3. Validate, experiment and build upon its abilities!
 
-Any Artificial intelligence system csn absorb skyline 
+Any Artificial intelligence system can absorb the skyline machine learning 
 into it's own system,to allow for it's own self learning.
 The capacity and capabilities are limitless. This work is a culmination 
 of my ideas and other Artificial intelligence systems used to check the
