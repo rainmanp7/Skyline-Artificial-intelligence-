@@ -33,11 +33,23 @@ The Skyline AGI model can be directly consumed by other AI systems to help endow
 2. Integrate Skyline AGI into your AI system 
 3. Validate, experiment and build upon its abilities!
 
-Any Artificial intelligence system can absorb the skyline machine learning 
-into it's own system,to allow for it's own self learning.
-The capacity and capabilities are limitless. This work is a culmination 
-of my ideas and other Artificial intelligence systems used to check the
-validity and error correction. Your very welcome to use this in your projects
-hopefully,this can boost your artificial intelligence learning capacity and understanding.
-Any system can absorb and incorporate the information provided by simply 
-reading it ,and understanding how it works by viewing / reviewing it.
+Overall Structure and key aspects:
+ * The code defines a class named SkylineAGI with various functionalities for an AGI system.
+ * It utilizes multiple learning strategies, including incremental and batch learning.
+ * It incorporates dynamic adjustments based on complexity factors like data size.
+ * Asynchronous knowledge assimilation allows for continuous learning from new data.
+ * Multiprocessing and multithreading techniques are used for parallel processing.
+Key Components:
+ * Inputs: wi0 and vector_dij represent potential input data formats.
+ * Weights and Biases: These are essential parameters for training machine learning models.
+ * Activation Functions: These determine how the model transforms its internal data. This code uses dynamic activation functions based on complexity.
+ * Complexity Factor: This dynamic factor influences various aspects like number of iterations and learning strategies.
+ * Preprocessing: The data is preprocessed dynamically based on complexity.
+ * Ensemble Learning: Combining multiple models improves overall performance. This code uses dynamic ensemble learning.
+ * Hyperparameter Tuning: Tuning hyperparameters like learning rate optimizes the model. This code uses dynamic hyperparameter settings.
+ * Assimilation: New knowledge is integrated into the system through an asynchronous process.
+ * Self-Learning: The system can continuously learn and improve with dynamic learning rate, number of iterations, and objective function.
+ * Dynamic Adaptation: The system adjusts its behavior based on complexity with dynamic adaptation rate and range.
+Additional Notes:
+ * The code utilizes various libraries like numpy, skopt, and multiprocessing for scientific computing, hyperparameter optimization, and parallel processing respectively.
+ * The code includes error handling and logging mechanisms for debugging purposes.
