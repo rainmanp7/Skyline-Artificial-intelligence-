@@ -1,4 +1,4 @@
-# Skyline-Artificial-intelligence-
+# Skyline Artificial intelligence
 Skyline Artificial General intelligence. AGI Machine Learning Model
 made in Mindanao, Davao Del Sur, Santacruz, Philippines by rainmanp7.
 
