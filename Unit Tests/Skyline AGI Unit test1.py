@@ -1,0 +1,22 @@
+### 1. 
+**Preprocessing and Complexity Factor**
+Ensure that the dynamic preprocessing and complexity factor calculation functions are working as expected.
+
+```python
+import unittest
+from skyline_agi import compute_hash, get_complexity_factor
+
+class TestPreprocessing(unittest.TestCase):
+    def test_compute_hash(self):
+        data = "test_data"
+        expected_hash = hashlib.sha256(str(data).encode()).hexdigest()
+        self.assertEqual(compute_hash(data), expected_hash)
+
+    def test_complexity_factor(self):
+        input_data = [1, 2, 3, 4, 5]
+        complexity = get_complexity_factor(input_data)
+        self.assertEqual(complexity, 5)  # Since length of input_data is 5
+
+if __name__ == '__main__':
+    unittest.main()
+```
