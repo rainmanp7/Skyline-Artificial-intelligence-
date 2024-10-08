@@ -53,3 +53,9 @@ Key Components:
 Additional Notes:
  * The code utilizes various libraries like numpy, skopt, and multiprocessing for scientific computing, hyperparameter optimization, and parallel processing respectively.
  * The code includes error handling and logging mechanisms for debugging purposes.
+
+Skyline 4.6 preview
+![preview](https://github.com/rainmanp7/Skyline AGI 4.6 Architecture.jpg)
+
+Skyline 4.7 Base4 preview
+![preview](https://github.com/rainmanp7/Skyline-Artificial-intelligence-/edit/main/Skyline 4.7-Base4.webp)
