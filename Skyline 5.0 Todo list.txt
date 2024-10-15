@@ -1,0 +1,77 @@
+The Todo list agenda.
+October 16th 2024 5:23am.
+
+USE WHAT WE ALREADY HAVE WORKING FIRST!
+Build on to that first.
+Modify or alter what is already
+existing then the other stuff.
+Don't get distracted or overwhelmed by what we don't have done and use what we have available and keep moving forward.
+
+
+Skyline AGI 5.0 5 adjustments
+October 15th 2024
+To add and incorporate behavior traits.
+I need to really review this information to figure out what would come in order
+By looking at these 5 and ask what would come first to make this possibly work togeather in harmony with one another.
+
+1:
+## Self-Tuning
+
+Make it so that the code can self tune
+It's own parameters and suggest the correct optimal performance parameters and self adjust them.
+
+2:
+Use its own 
+## **Bayesian optimization** mechanism to continuously tweak and tune hyperparameters, 
+
+adjusting based on performance metrics.
+
+3:
+## Incorporate logic 
+that allows the system to detect where it’s not functioning optimally or where certain processes are lagging. 
+
+This can lead to **automated bug detection** or performance bottlenecks.
+
+4:
+## Self-Learning
+To self learn we must first apply a
+way to self correct first.
+
+5:
+The system could adopt 
+## **reinforcement learning** principles where it rewards itself for optimizing its processes and penalizes inefficient behavior, iterating toward improved efficiency and intelligence.
+
+
+### 1. **Self-Learning & Self-Tuning:**
+   Your system could be designed to monitor its own performance during training and operational tasks, identifying areas where it can improve. Specifically, it could:
+--------------
+(( Monitor its own performance during operational tasks, identifying areas where it can improve ))
+By providing a perfi.log file.
+but we really want to do this in a
+memory space later because it's quicker.
+But we can start with a verification log file for it's specific purpose.
+--------------
+   - **Adjust Hyperparameters**: Use its own **Bayesian optimization** mechanism to continuously tweak and tune hyperparameters, adjusting based on performance metrics. 
+
+   - **Self-Diagnosis**: Incorporate logic that allows the system to detect where it’s not functioning optimally or where certain processes are lagging. This can lead to **automated bug detection** or performance bottlenecks.
+
+   - **Reinforcement Learning**: The system could adopt **reinforcement learning** principles where it rewards itself for optimizing its processes and penalizes inefficient behavior, iterating toward improved efficiency and intelligence.
+
+Agenda Goal on the Todo list.
+To make the conclusion possible.
+(( Here ))
+Is it possible that we could use the system Skyline AGI 4.8c to help us build it ?
+
+Yes, it’s absolutely possible to use the system itself to help in its own development! This concept is often referred to as **self-improvement** or **bootstrapping**.
+
+### Conclusion:
+The approach that's to be taking place suggests that the system already has many of the components necessary for **self-improvement** and **self-tuning**, especially with mechanisms like **Bayesian optimization**, 
+**reasoning**, and 
+**curiosity-driven exploration**. 
+If designed properly, the system could gradually take on more responsibility for its own development, refining and expanding its abilities autonomously.
+
+By integrating these features, the system could become not just a powerful tool, but a **collaborative partner** in its own evolution, helping you build it faster and more efficiently. This would be cutting-edge AI development, as few systems today are capable of such a high level of self-directed improvement.
+
+Thinking, Walking, Talking. TWT.
+Complexity Factor.
+
