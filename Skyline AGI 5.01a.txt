@@ -1,0 +1,364 @@
+
+# Skyline AGI 5.01a
+# Monday October 18th 2024.
+# By rainmanp7.
+# tune hyper parameters done
+# October 18 10:00pm FRI - 19th
+# hyper parameters in place now.
+# Jason configuration omitted 
+'''python
+from multiprocessing import Process, Value, Lock, Pool, shared_memory
+import concurrent.futures
+import threading
+import os
+import functools
+import numpy as np
+import asyncio
+import logging
+import traceback
+import hashlib
+import time
+from collections import deque
+from skopt import BayesSearchCV
+# mod5 imports
+from skopt.space import Real, Integer, Categorical
+from sklearn.gaussian_process import GaussianProcessRegressor
+from sklearn.gaussian_process.kernels import Matern
+from sklearn.model_selection import cross_val_score
+
+
+logging.basicConfig(level=logging.INFO)
+
+activation_lock = threading.Lock()
+preprocessing_lock = threading.Lock()
+ensemble_lock = threading.Lock()
+knowledge_lock = threading.Lock()
+complexity_lock = threading.Lock()
+
+# Shared variable for complexity factor
+shared_complexity_factor = Value('d', 0.0)
+
+# Dictionary to store the previous hash of data and hyperparameters
+# Invalidate cached model results if the training data or hyperparameters have changed.
+       # This ensures that the model is retrained with the most current data.
+cache_conditions = {
+    'X_train_hash': None,
+    'y_train_hash': None,
+    'hyperparameters_hash': None,
+}
+
+# Function to compute hash of data
+def compute_hash(data):
+# Compute a hash of the data to track changes and ensure cache invalidation if data changes.
+    return hashlib.sha256(str(data).encode()).hexdigest()
+
+# Function to invalidate cache if conditions change
+def invalidate_cache_if_changed(current_X_train, current_y_train, current_hyperparameters):
+# Invalidate cached model results if the training data or hyperparameters have changed.
+       # This ensures that the model is retrained with the most current data.
+    # Compute hashes of the current data and hyperparameters
+    current_X_train_hash = compute_hash(current_X_train)
+    current_y_train_hash = compute_hash(current_y_train)
+    current_hyperparameters_hash = compute_hash(current_hyperparameters)
+
+# Check if any of the hashes have changed
+    if (cache_conditions['X_train_hash'] != current_X_train_hash or
+        cache_conditions['y_train_hash'] != current_y_train_hash or
+        cache_conditions['hyperparameters_hash'] != current_hyperparameters_hash):
+        
+# Clear the cache if there are changes
+        cached_bayesian_fit.cache_clear()
+        
+# Update the stored hashes with the new values
+        cache_conditions['X_train_hash'] = current_X_train_hash
+        cache_conditions['y_train_hash'] = current_y_train_hash
+        cache_conditions['hyperparameters_hash'] = current_hyperparameters_hash
+
+# Memoization decorator for complexity factor
+@functools.lru_cache(maxsize=1024)
+def get_complexity_factor(input_data):
+    try:
+# Placeholder example: Calculate complexity based on the length of input_data
+        complexity_factor = len(input_data)
+def get_complexity_factor(input_data):
+       # Compute complexity based on the length of the input data.
+       # The assumption here is that larger datasets are more complex and require different processing.
+       complexity_factor = len(input_data)
+        with complexity_lock:
+            shared_complexity_factor.value = complexity_factor
+        logging.info(f"Complexity factor computed: {complexity_factor}")
+        return complexity_factor
+    except Exception as e:
+        logging.error(f"Error in get_complexity_factor: {str(e)}. Stack trace: {traceback.format_exc()}")
+
+# Function to choose the number of iterations based on complexity
+def choose_num_iterations_based_on_complexity(complexity_factor):
+# Based on the complexity factor, determine how many iterations to run for model training.
+       # Lower complexity means fewer iterations, while higher complexity requires more iterations.
+    if complexity_factor < 10:
+        return 50
+    elif 10 <= complexity_factor < 100:
+        return 100
+    else:
+        return 200
+
+# Function to choose objective function based on complexity
+def choose_objective_function_based_on_complexity(complexity_factor):
+    if complexity_factor < 10:
+        return 'mse'  # Mean Squared Error for low complexity
+    elif 10 <= complexity_factor < 100:
+        return 'mae'  # Mean Absolute Error for medium complexity
+    else:
+        return 'huber'  # Huber loss for higher complexity
+
+# Function to choose adaptation rate based on complexity
+def choose_adaptation_rate_based_on_complexity(complexity_factor):
+    return 0.01 * complexity_factor
+
+# Function to choose adaptation range based on complexity
+def choose_adaptation_range_based_on_complexity(complexity_factor):
+    return min(0.1, 0.001 * complexity_factor)
+
+# Function to parallelize learning strategy adjustments with multiprocessing
+def parallelize_learning_strategy_adjustments(learning_strategies, knowledge_lock):
+    # Multiprocessing is used to parallelize learning strategy adjustments across multiple cores.
+       # This improves efficiency by allowing concurrent updates to each strategy.
+# Lock is used here to ensure that learning strategy adjustments happen one at a time.
+       # This prevents race conditions when multiple threads try to adjust the same strategy concurrently.
+with multiprocessing.Pool() as pool:
+        pool.map(lambda strategy: adjust_learning_strategy(strategy, knowledge_lock), learning_strategies)
+
+# Function to parallelize dynamic adaptation adjustments with multithreading
+
+async def parallel_dynamic_adaptation_async(adaptation_tasks):
+    tasks = [adjust_dynamic_adaptation(task) for task in adaptation_tasks]
+    return await asyncio.gather(*tasks)
+
+### End of parallel adjustment 
+
+# Function to adjust learning strategy
+# Modified date October 7 1024
+# modified on 10/10 async
+
+@functools.lru_cache(maxsize=8192)
+async def adjust_learning_strategy_async(learning_strategy, lock):
+    try:
+        async with lock:
+            logging.info(f"Adjusting learning strategy: {learning_strategy['name']}")
+            if learning_strategy['name'] == 'incremental_learning':
+                logging.info(f"Incremental learning adjustment done.")
+            elif learning_strategy['name'] == 'batch_learning':
+                logging.info(f"Batch learning adjustment done.")
+    except Exception as e:
+        logging.error(f"Error in adjust_learning_strategy_async: {str(e)}. Stack trace: {traceback.format_exc()}")
+
+# Function to adjust dynamic adaptation
+@functools.lru_cache(maxsize=4096)
+def adjust_dynamic_adaptation(lock):
+    try:
+        with lock:
+            # Example dynamic adaptation logic
+            logging.info("Adjusting dynamic adaptation...")
+            # Add actual adaptation logic here
+            logging.info("Dynamic adaptation adjustment complete.")
+    except Exception as e:
+        logging.error(f"Error in adjust_dynamic_adaptation: {str(e)}. Stack trace: {traceback.format_exc()}")
+
+@functools.lru_cache(maxsize=1024)
+
+# New SimpleKnowledgeBase class
+class SimpleKnowledgeBase:
+    def __init__(self, max_recent_items=100):
+        self.data = {}
+        self.recent_updates = deque(maxlen=max_recent_items)
+
+    def update(self, key, value):
+        with knowledge_lock:
+            if key in self.data:
+                self.data[key].extend(value)
+                self.data[key] = list(set(self.data[key]))  # Remove duplicates
+            else:
+                self.data[key] = value
+            self.recent_updates.append((key, value))
+
+# New streamlined assimilation function
+async def streamlined_assimilate_knowledge(knowledge_base, new_data):
+    try:
+        logging.info("Assimilating knowledge...")
+        for key, value in new_data.items():
+            knowledge_base.update(key, value)
+            logging.info(f"Updated knowledge for key: {key}")
+        
+        # Quick reinforcement of recent updates
+        for key, value in knowledge_base.recent_updates:
+            if key in knowledge_base.data:
+                logging.info(f"Reinforcing recently updated knowledge: {key}")
+                # Add logic here to adjust weights or importance if needed
+                await process_new_knowledge(key, value)
+        
+        logging.info("Knowledge assimilation and reinforcement complete.")
+    except Exception as e:
+        logging.error(f"Error in streamlined_assimilate_knowledge: {str(e)}")
+
+# New streamlined assimilation function
+# modified 10/10 gather tasks added
+async def streamlined_assimilate_knowledge(knowledge_base, new_data):
+    try:
+        logging.info("Assimilating knowledge...")
+        tasks = []
+        for key, value in new_data.items():
+            knowledge_base.update(key, value)
+            logging.info(f"Updated knowledge for key: {key}")
+            tasks.append(process_new_knowledge(key, value))
+        await asyncio.gather(*tasks)
+        logging.info("Knowledge assimilation and reinforcement complete.")
+    except Exception as e:
+        logging.error(f"Error in streamlined_assimilate_knowledge: {str(e)}")
+
+# Properly invoke the async function using asyncio.run()
+asyncio.run(streamlined_assimilate_knowledge(knowledge_base, new_data))
+
+# Combined asynchronous function to process new knowledge (merged logic with original comments)
+async def process_new_knowledge(key, value):
+    try:
+        # Example processing logic (can be model retraining, feature extraction, etc.)
+ # Simulate an I/O-bound operation with asyncio.sleep. This could represent
+       # a more complex process like updating a model, extracting features, etc.
+        await asyncio.sleep(0.1)  
+# Simulating asynchronous I/O-bound processing
+        
+# Log that the new knowledge has been processed
+        logging.info(f"Processed new knowledge for key: {key}, data: {value}")
+    
+    except Exception as e:
+        # Enhanced error handling with stack trace for debugging purposes
+        logging.error(f"Error in process_new_knowledge: {str(e)}. Stack trace: {traceback.format_exc()}")
+
+# Define hyperparameter space for Bayesian optimization
+
+# mod5 start Fri Oct18
+``python
+try:
+    param_space = {
+        'learning_rate': Real(1e-6, 1e-2, prior='log-uniform'),
+        'n_estimators': Integer(50, 200),
+        'max_depth': Integer(5, 15),
+        'subsample': Real(0.5, 1.0),
+        'min_samples_split': Integer(2, 10),
+        'min_samples_leaf': Integer(1, 10),
+    }
+
+    # Example training data
+    X_train = np.random.rand(100, 10)
+    y_train = np.random.rand(100)
+
+except Exception as e:
+    logging.error(f"Error defining hyperparameter space or data: {str(e)}. Stack trace: {traceback.format_exc()}")
+# mod5 end ------
+
+# Define a Bayesian optimization object
+class YourModelClass:
+    def __init__(self):
+        # Initialize your model
+        self.model = YourSpecificModel()  # Replace with actual model initialization
+
+    def fit(self, X, y):
+        # Fit your model
+        logging.info(f"Fitting model with data X: {X.shape}, y: {y.shape}")
+        self.model.fit(X, y)
+
+# Cache the Bayesian optimization fit method
+@functools.lru_cache(maxsize=2048)
+def cached_bayesian_fit(X_train_hash, y_train_hash, param_space_hash):
+    try:
+        # Note: X_train and y_train should be accessed from shared memory here
+        bayes_opt.fit(X_shared, y_shared)
+        logging.debug(f"Best hyperparameters: {bayes_opt.best_params_}, Best score: {bayes_opt.best_score_}")
+        return bayes_opt.best_params_, bayes_opt.best_score_
+    except Exception as e:
+        logging.error(f"Error fitting the model: {str(e)}. Stack trace: {traceback.format_exc()}")
+        return None
+
+# Parallel Bayesian Optimization Function with dynamic complexity modified 10/8
+
+def choose_num_iterations_based_on_complexity(complexity_factor):
+    if complexity_factor < 10:
+        return 50
+    elif 10 <= complexity_factor < 100:
+        return 100
+    else:
+        return 200
+
+def choose_num_workers_based_on_complexity(complexity_factor):
+    max_cores = os.cpu_count() or 1
+    return min(max(1, complexity_factor // 10), max_cores)
+
+# mod6 start------cor hype
+def parallel_bayesian_optimization(param_space, X_train, y_train):
+    try:
+        complexity_factor = get_complexity_factor(X_train)
+
+        # Dynamically determine the number of iterations and workers based on complexity
+        num_iterations = choose_num_iterations_based_on_complexity(complexity_factor)
+        num_workers = choose_num_workers_based_on_complexity(complexity_factor)
+
+        logging.debug(f"Using {num_workers} workers and {num_iterations} iterations based on complexity factor {complexity_factor}")
+
+# 2nd part
+
+        # Create shared memory for X_train and y_train (assuming numpy arrays)
+        shm_X = shared_memory.SharedMemory(create=True, size=X_train.nbytes)
+        shm_y = shared_memory.SharedMemory(create=True, size=y_train.nbytes)
+
+        # Load data into shared memory
+        X_shared = np.ndarray(X_train.shape, dtype=X_train.dtype, buffer=shm_X.buf)
+        y_shared = np.ndarray(y_train.shape, dtype=y_train.dtype, buffer=shm_y.buf)
+        np.copyto(X_shared, X_train)
+        np.copyto(y_shared, y_train)
+
+
+          # Compute hashes for cache invalidation
+        X_train_hash = compute_hash(X_shared)
+        y_train_hash = compute_hash(y_shared)
+        param_space_hash = compute_hash(param_space)
+
+        # Invalidate cache if conditions have changed
+        invalidate_cache_if_changed(X_train_hash, y_train_hash, param_space_hash)
+
+        # Create and run the Bayesian optimization with dynamic iterations
+        gp = GaussianProcessRegressor(kernel=Matern(nu=2.5), n_restarts_optimizer=20, random_state=42)
+        bayes_opt = BayesSearchCV(
+            estimator=YourModelClass(),
+            search_spaces=param_space,
+            n_iter=num_iterations,
+            cv=3,
+            n_jobs=num_workers,
+            optimizer_kwargs={'base_estimator': gp},
+            random_state=42
+        )
+        
+        # Use the cached version of Bayesian optimization fit
+        best_params, best_score = cached_bayesian_fit(X_train_hash, y_train_hash, param_space_hash)
+        
+        if best_params is not None:
+            result = type('OptimizationResult', (), {'best_params_': best_params, 'best_score_': best_score})
+        else:
+            result = bayes_opt.fit(X_shared, y_shared)
+
+        # Clean up shared memory after optimization
+        shm_X.close()
+        shm_y.close()
+        shm_X.unlink()
+        shm_y.unlink()
+
+        return result
+
+    except Exception as e:
+        logging.error(f"Error in parallel Bayesian optimization: {str(e)}")
+
+# mod7 end----
+
+        return None
+
+# mod6 end----
+''''
